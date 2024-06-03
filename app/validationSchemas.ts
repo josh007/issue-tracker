@@ -1,6 +1,6 @@
 import { string, z } from "zod";
 
 export const schemaIssue = z.object({
-  title: z.string().min(1, "Title is required").max(255),
-  description: z.string().min(1, "Description is required"),
+  title: z.string().min(2, "Title is required").max(255),
+  description: z.string().min(2, "Description is required"),
 });
