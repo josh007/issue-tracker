@@ -1,5 +1,6 @@
 import { schemaIssue } from "@/app/validationSchemas";
 import prisma from "@/prisma/client";
+import delay from "delay";
 import { NextRequest, NextResponse } from "next/server";
 
 interface Props {
@@ -39,8 +40,6 @@ export async function DELETE(req: NextRequest, { params }: Props) {
 
   if (!issue)
     return NextResponse.json({ error: "Invalid issue" }, { status: 404 });
-
-  console.log("to be deleted---->", issue.id);
 
   await prisma.issue.delete({
     where: { id: issue.id },
