@@ -1,12 +1,16 @@
 "use client";
-import { Button, Callout, Text, TextField } from "@radix-ui/themes";
+import { Button, Callout, Link, Text, TextField } from "@radix-ui/themes";
 import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import "easymde/dist/easymde.min.css";
 import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { InfoCircledIcon } from "@radix-ui/react-icons";
+import {
+  InfoCircledIcon,
+  MinusCircledIcon,
+  ResetIcon,
+} from "@radix-ui/react-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { schemaIssue } from "@/app/validationSchemas";
 import { z } from "zod";
@@ -51,7 +55,6 @@ const IssueForm = ({ issue }: Props) => {
     }
   });
 
-  console.log("------------->", issue);
   return (
     <div className="max-w-xl">
       {error && (
@@ -86,6 +89,17 @@ const IssueForm = ({ issue }: Props) => {
         <Button disabled={isSubmitting}>
           {issue ? "Update Issue" : "Submit New Issue"}{" "}
           {isSubmitting && <Spinner />}
+        </Button>
+        <Button
+          ml="2"
+          variant="solid"
+          color="green"
+          onClick={async () => {
+            router.push("/issues");
+          }}
+        >
+          <ResetIcon />
+          Return
         </Button>
       </form>
     </div>
