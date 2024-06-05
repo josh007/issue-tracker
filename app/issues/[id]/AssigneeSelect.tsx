@@ -6,7 +6,7 @@ import { Select } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast, { Toaster, ToastOptions } from "react-hot-toast";
 
 const AssigneeSelect = ({ issue }: { issue: Issue }) => {
   // const [users, setUsers] = useState<User[]>([]);
@@ -18,34 +18,30 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
 
   //   fetchUsers();
   // }, []);
-  const {
-    data: users,
-    error,
-    isLoading,
-  } = useQuery<User[]>({
-    queryKey: ["users"],
-    queryFn: async () => await axios.get("/api/users").then((res) => res.data),
-    staleTime: 60 * 1000, //for 60sec it won't be re-fetched
-    retry: 3,
-  });
+  const { data: users, error, isLoading } = useUsers();
 
   if (isLoading) return <Skeleton />;
 
   if (error) return null;
 
+  const assignIssue = (userId: string) => {
+    axios
+      .patch("/api/issues/" + issue.id, {
+        assignedToUserId: userId !== "-" ? userId : null,
+      })
+      .then(() => {
+        toast.success("Successfully assinged.");
+      })
+      .catch(() => {
+        toast.error("Changes couldn't be saved.");
+      });
+  };
+
   return (
     <>
       <Select.Root
         defaultValue={issue.assignedToUserId || "-"}
-        onValueChange={(userId) => {
-          axios
-            .patch("/api/issues/" + issue.id, {
-              assignedToUserId: userId !== "-" ? userId : null,
-            })
-            .catch(() => {
-              toast.error("Changes couldn't be saved");
-            });
-        }}
+        onValueChange={assignIssue}
       >
         <Select.Trigger placeholder="Assign...." />
         <Select.Content>
@@ -67,5 +63,13 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
     </>
   );
 };
+
+const useUsers = () =>
+  useQuery<User[]>({
+    queryKey: ["users"],
+    queryFn: async () => await axios.get("/api/users").then((res) => res.data),
+    staleTime: 24 * 60 * 60 * 1000, //for 24hr it won't be re-fetched
+    retry: 3,
+  });
 
 export default AssigneeSelect;
