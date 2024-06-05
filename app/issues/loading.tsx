@@ -2,14 +2,14 @@ import { Table } from "@radix-ui/themes";
 import React from "react";
 import IssueStatusBadge from "../components/IssueStatusBadge";
 import { Skeleton } from "@/app/components";
-import IssuesAction from "../components/IssuesAction";
+import IssuesActions from "../components/IssuesAction";
 
 const LoadingIssuesPage = () => {
   const issues = [1, 2, 3, 4, 5];
 
   return (
     <>
-      <IssuesAction />
+      <IssuesActions />
       <Table.Root variant="surface">
         <Table.Header>
           <Table.Row>

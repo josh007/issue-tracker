@@ -3,7 +3,7 @@ import Link from "next/link";
 import React from "react";
 import IssueStatusFilter from "./IssueStatusFilter";
 
-const IssuesAction = () => {
+const IssuesActions = () => {
   return (
     <Flex mb="5" justify="between">
       <IssueStatusFilter />
@@ -14,4 +14,4 @@ const IssuesAction = () => {
   );
 };
 
-export default IssuesAction;
+export default IssuesActions;

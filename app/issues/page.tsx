@@ -4,16 +4,29 @@ import { IssueStatusBadge, Link } from "@/app/components";
 // import IssueStatusBadge from "../components/IssueStatusBadge";
 // import Link from "../components/Link";
 //import delay from "delay";
-import IssuesAction from "../components/IssuesAction";
+import IssuesActions from "../components/IssuesAction";
+import { Status } from "@prisma/client";
+import { object } from "zod";
 
-const IssuesPage = async () => {
-  const issues = await prisma.issue.findMany();
+interface Props {
+  searchParams: { status: Status };
+}
+
+const IssuesPage = async ({ searchParams }: Props) => {
+  const allStatus = Object.values(Status);
+  const status = allStatus.includes(searchParams.status)
+    ? searchParams.status
+    : undefined;
+
+  const issues = await prisma.issue.findMany({
+    where: { status: status },
+  });
 
   //await delay(2000);
 
   return (
     <>
-      <IssuesAction />
+      <IssuesActions />
       <Table.Root variant="surface">
         <Table.Header>
           <Table.Row>
